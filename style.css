@@ -1,3 +1,6 @@
+/*  #ecb538 yellow */
+/* #d8544a red */
+
 body {
   margin: 0;
   background: #0e98e3;
@@ -36,8 +39,8 @@ p {
 #turnCoin {
   width: 50px;
   height: 50px;
-  border: 2px blue solid;
-  background: blue;
+  border: 2px #d8544a solid;
+  background: #d8544a;
   border-radius: 50px;
   align-self: center;
 }
@@ -54,7 +57,7 @@ p {
   flex-direction: column;
 }
 .columnSelector, .gameBoard, #resetBtn {
-  width: 600px;
+  width: 595px;
   align-self: center;
 }
 .columnSelector {
@@ -64,32 +67,52 @@ p {
 .gameBoard {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
+  flex: 1;
   align-items: flex-end;
-  height: 420px;
-  background: #175DCC;
+  height: 430px;
+  /*background: #175DCC;*/
   padding: 0;
   margin: 0;
-  border-radius: 10px 10px 0 0;
+  /*border-radius: 10px 10px 0 0;
   border-right: 10px #004fcc solid;
   border-left: 1px #3972cc solid;
-  border-top: 1px #3972cc solid;
+  border-top: 1px #3972cc solid;*/
 }
 #resetBtn {
-  height: 20px;
+  height: 30px;
   background: #175DCC;
   border-radius: 0 0 10px 10px;
-  border-right: 10px #004fcc solid;
+  /*border-right: 10px #004fcc solid;
   border-bottom: 5px #004fcc solid;
-  border-left: 1px #3972cc solid;
+  border-left: 1px #3972cc solid;*/
 }
-.slot {
+/*.slot {
   height: 55px;
   width: 55px;
   margin: 8px;
-  /*background: rgba(0,0,0,0);*/
   background: #0e98e3;
   border-radius: 50%;
   border: 3px #004fcc solid;
   align-self: flex-end;
+}*/
+.slot {
+  height: 55px;
+  width: 55px;
+  position: relative;
+  overflow: hidden;
+  padding: 8px 15px;
 }
+.slot::before {
+  content: '';
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  border-radius: 100%;
+  box-shadow: 0px 7px 0px 34px #175dcc;
+}
+.col:hover {
+  background: rgba(0, 79, 204, .2);
+  border-radius: 25px;
+}
+
