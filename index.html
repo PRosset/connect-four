@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Connect Four</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <header><h1>Connect-Four</h1></header>
+
+    <div class="scoreBoard">
+      <div class="score scoreP1">
+        <div class="playerName" id="nameOne">
+          <p>Player 1</p><span class="editBtn" id="editOne"></span>
+        </div>
+        <div class="playerScore" id="scoreOne">
+          <p>0</p>
+        </div>
+      </div>
+      <div>
+        <div id="turnCoin"></div>
+      </div>
+      <div class="score scoreP2">
+        <div class="playerName" id="nameTwo">
+          <p>Player 2</p><span class="editBtn" id="editTwo"></span>
+        </div>
+        <div class="playerScore" id="scoreTwo">
+          <p>0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="playSpace">
+      <div class="columnSelector"></div>
+      <div class="gameBoard"></div>
+      <div id="resetBtn"></div>
+    </div>
+
+  </div>
+</body>
+</html>
