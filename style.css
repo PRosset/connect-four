@@ -56,38 +56,32 @@ p {
   width: 400px;
   flex-direction: column;
 }
-.columnSelector, .gameBoard, #resetBtn {
+.columnSelector, #gameBoard, #resetBtn {
   width: 595px;
   align-self: center;
 }
 .columnSelector {
-  height: 30px;
+  height: 10px;
+  background: #175DCC;
+  border-radius: 10px 10px 0 0;
+  margin: 30px 0 0 0;
   /*background: rgba(23, 93, 204, .2);*/
 }
-.gameBoard {
+#gameBoard {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   flex: 1;
   align-items: flex-end;
-  height: 430px;
-  /*background: #175DCC;*/
+  background: #175DCC;
   padding: 0;
   margin: 0;
-  /*border-radius: 10px 10px 0 0;
-  border-right: 10px #004fcc solid;
-  border-left: 1px #3972cc solid;
-  border-top: 1px #3972cc solid;*/
 }
 #resetBtn {
   height: 30px;
   background: #175DCC;
   border-radius: 0 0 10px 10px;
-  /*border-right: 10px #004fcc solid;
-  border-bottom: 5px #004fcc solid;
-  border-left: 1px #3972cc solid;*/
 }
-/*.slot {
+.slot {
   height: 55px;
   width: 55px;
   margin: 8px;
@@ -95,8 +89,16 @@ p {
   border-radius: 50%;
   border: 3px #004fcc solid;
   align-self: flex-end;
-}*/
-.slot {
+}
+.col:hover {
+  background: rgba(0, 79, 204, .75);
+  border-radius: 25px;
+}
+.slot .player1 {
+  background: #d8544a;
+}
+
+/*.slot {
   height: 55px;
   width: 55px;
   position: relative;
@@ -114,5 +116,5 @@ p {
 .col:hover {
   background: rgba(0, 79, 204, .2);
   border-radius: 25px;
-}
+}*/
 
