@@ -1,11 +1,3 @@
-// Need to build a board out of a 2d array.
-// newBoard = [[0, 1, 2, 3, 4, 5],
-//             [0, 1, 2, 3, 4, 5],
-//             [0, 1, 2, 3, 4, 5],
-//             [0, 1, 2, 3, 4, 5],
-//             [0, 1, 2, 3, 4, 5],
-//             [0, 1, 2, 3, 4, 5],
-//             [0, 1, 2, 3, 4, 5]]
 var slotStates = ['empty', 'player1', 'player2'];
 
 buildBoard();
@@ -34,6 +26,6 @@ function buildBoard () {
 }
 
 function dropToken () {
-  this.lastChild.className = "slot player1";
+  // this.lastChild.className = "slot player1";
   console.log('This works! You clicked on: ' + this.className);
 }
