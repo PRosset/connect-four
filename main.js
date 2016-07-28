@@ -1,5 +1,9 @@
 var slotStates = ['empty', 'player1', 'player2'];
 
+var playerStart = 1;
+var playerTurn = 1;
+
+
 buildBoard();
 
 function buildBoard () {
@@ -14,7 +18,7 @@ function buildBoard () {
     domBoard.appendChild(col);
 
     // Add rows to each column
-    for (j = 0; j < 6; j++) {
+    for (j = 6; j > 0; j--) {
       var slot = document.createElement('div');
       slot.setAttribute('state', slotStates[0]);
       slot.className = 'slot slot' + j;
@@ -24,8 +28,31 @@ function buildBoard () {
   }
   // console.log('gameBoard:', gameBoard);
 }
+function buildResetBtn () {
+  var resetSlit = document.createElement('div');
+
+  resetSlit.className = ''
+  resetSlit.addEventListener('click', resetBoard);
+
+}
 
 function dropToken () {
-  // this.lastChild.className = "slot player1";
+  if (playerTurn === 1) {
+    this.lastChild.className = "slot player1";
+  } else if (playerTurn === 2) {
+    this.lastChild.className = "slot player2";
+  }
+
+  playerTurn = 3 - playerTurn;
+
   console.log('This works! You clicked on: ' + this.className);
+}
+
+function resetBoard () {
+  if (resetBtn.className === "resetActive"){
+    resetBtn.className = "";
+  } else {
+    resetBtn.className = "resetActive";
+  }
+  playerStart = 3 - playerStart;
 }
