@@ -1,5 +1,4 @@
-var slotStates = ['empty', 'player1', 'player2'];
-
+// var slotStates = ['empty', 'player1', 'player2'];
 var playerStart = 1;
 var playerTurn = 1;
 
@@ -14,17 +13,19 @@ function buildBoard () {
     var col = document.createElement('div');
     col.className = 'col col' + i;
     col.addEventListener('click', dropToken);
-    domBoard.appendChild(col);
 
     // Add rows to each column
     for (j = 6; j > 0; j--) {
       var slot = document.createElement('div');
-      slot.setAttribute('state', slotStates[0]);
+
+      // slot.setAttribute('state', slotStates[0]);
       slot.className = 'slot';
       slot.setAttribute('id', 'col ' + i + ' slot ' + j)
       col.appendChild(slot);
       gameBoard[i][j] = slot;
     }
+
+    domBoard.appendChild(col);
   }
   // buildResetBtn();
   console.log('gameBoard:', gameBoard);
