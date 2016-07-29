@@ -5,7 +5,6 @@ var playerTurn = 1;
 
 buildBoard();
 
-
 function buildBoard () {
   var gameBoard = [];
   var domBoard = document.getElementById('gameBoard');
