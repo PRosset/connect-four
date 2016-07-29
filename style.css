@@ -151,7 +151,7 @@ p {
   background: #2c3e50;
 }
 
-#gameBoard {
+/*#gameBoard {
   background: #175DCC;
 }
 .slot {
@@ -166,14 +166,14 @@ p {
 .col:hover {
   background: rgba(0, 79, 204, .75);
   border-radius: 25px;
-}
+}*/
 .slot.player1 {
   background: #d8544a;
 }
 .slot.player2 {
   background: #ecb538;
 }
-/*
+
 .slot {
   height: 50px;
   width: 50px;
@@ -195,4 +195,4 @@ p {
   border-radius: 25px;
 }
 
-*/
+

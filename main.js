@@ -33,34 +33,7 @@ function buildBoard () {
 
 // Building a reset button through Javascript.
 // function buildResetBtn () {
-//   var resetWrapper = document.createElement('div');
-//   var resetSlit = document.createElement('div');
-//   var resetBtn = document.createElement('div');
-//   var resetText = document.createElement('span');
-//   var resetBar = document.getElementById('resetBar');
-
-//   // $('resetBar').append('<div id="resetWrapper"><span id="resetText">Reset</span><div id="resetSlit"><div id="resetBtn"></div></div></div>')
-//   resetWrapper.setAttribute('id', 'resetWrapper');
-//   resetSlit.setAttribute('id', 'resetSlit');
-//   resetBtn.setAttribute('id', 'resetBtn');
-//   resetText.setAttribute('id', 'resetText');
-
-//   resetText.innerHTML = 'Reset';
-
-//   resetWrapper.appendChild(resetText);
-//   resetWrapper.appendChild(resetSlit);
-//   resetSlit.appendChild(resetBtn);
-
-//   resetBar.appendChild(resetWrapper);
-
-//   resetWrapper.addEventListener('onmouseover', function() {
-//     console.log('hello');
-//     resetText.setAttribute('class', 'resetTextActive');
-//   });
-//   resetWrapper.addEventListener('onmouseout', function() {
-//     resetText.setAttribute('class', '');
-//   });
-//   resetSlit.addEventListener('click', resetBoard);
+//   // $('resetBar').append('<div id="resetWrapper"><span id="resetText">Reset</span><div id="resetSlit"><div id="resetBtn"></div></div></div>');
 // }
 
 function dropToken () {
