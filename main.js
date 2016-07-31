@@ -1,11 +1,15 @@
 var playerStart = 1;
 var playerTurn = 1;
+var player1Score = 0;
+var player2Score = 0;
 
 var gameBoard = [];
 
-var play1ScoreBoard = $('.score.scoreP1');
-var play2ScoreBoard = $('.score.scoreP2');
+var $player1ScoreBoard = $('.score.scoreP1');
+var $player2ScoreBoard = $('.score.scoreP2');
 
+var $player1Score = $('#scoreOne');
+var $player2Score = $('#scoreTwo');
 var resetBtn = $('#resetSlit');
 resetBtn.click(resetGame);
 
@@ -59,23 +63,34 @@ function dropToken (col) {
 function resetGame () {
   if (resetBtn.hasClass('resetActive')){
     resetBtn.removeClass('resetActive');
+    player1Score = player1Score + 1;
+    $player1Score.text(player1Score);
   } else {
     resetBtn.addClass('resetActive');
+    player2Score = player2Score + 1;
+    $player2Score.text(player2Score);
   }
-  console.log("player" + playerStart + " was starting");
+
   playerStart = 3 - playerStart;
-  console.log('player' + playerStart + ' now starting');
   playerTurn = playerStart;
   togglePlayer(playerTurn);
+
+  //Reset board data and cell class names
+  for (var i = 0; i < gameBoard.length; i++) {
+    for (var j = 0; j < gameBoard[0].length; j++) {
+      gameBoard[i][j] = 0;
+      $('#col' + i + 'cell' + j).removeClass('player1 player2');
+    }
+  }
 }
 
 function togglePlayer(playerNum) {
   if (playerNum === 1) {
-    play1ScoreBoard.css('background', 'rgba(216, 84, 74, 1)')
-    play2ScoreBoard.css('background', 'rgba(236, 181, 56, 0)')
+    $player1ScoreBoard.css('background', 'rgba(216, 84, 74, 1)')
+    $player2ScoreBoard.css('background', 'rgba(236, 181, 56, 0)')
   } else {
-    play2ScoreBoard.css('background', 'rgba(236, 181, 56, 1)')
-    play1ScoreBoard.css('background', 'rgba(216, 84, 74, 0)')
+    $player2ScoreBoard.css('background', 'rgba(236, 181, 56, 1)')
+    $player1ScoreBoard.css('background', 'rgba(216, 84, 74, 0)')
   }
 }
 
