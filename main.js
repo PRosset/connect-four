@@ -1,62 +1,154 @@
-// var slotStates = ['empty', 'player1', 'player2'];
 var playerStart = 1;
 var playerTurn = 1;
+
+var gameBoard = [];
+
+var play1ScoreBoard = $('.score.scoreP1');
+var play2ScoreBoard = $('.score.scoreP2');
+
+var resetBtn = $('#resetSlit');
+resetBtn.click(resetBoard);
 
 buildBoard();
 
 function buildBoard () {
-  var gameBoard = [];
   var domBoard = document.getElementById('gameBoard');
 
   for (i = 0; i < 7; i++) {
     gameBoard[i] = [];
     var col = document.createElement('div');
+
+    var lastcell = 0;
+
     col.className = 'col col' + i;
-    col.addEventListener('click', dropToken);
-
+    col.setAttribute('onclick', 'dropToken(' + i + ')');
     // Add rows to each column
-    for (j = 6; j > 0; j--) {
-      var slot = document.createElement('div');
+    for (j = 0; j < 6; j++) {
+      var cell = document.createElement('div');
 
-      // slot.setAttribute('state', slotStates[0]);
-      slot.className = 'slot';
-      slot.setAttribute('id', 'col ' + i + ' slot ' + j)
-      col.appendChild(slot);
-      gameBoard[i][j] = slot;
+      cell.className = 'cell';
+      cell.setAttribute('id', 'col' + i + 'cell' + j)
+      col.appendChild(cell);
+      gameBoard[i][j] = 0;
     }
 
     domBoard.appendChild(col);
   }
-  // buildResetBtn();
-  console.log('gameBoard:', gameBoard);
+  // console.log('gameBoard:', gameBoard);
 }
 
-// Building a reset button through Javascript.
-// function buildResetBtn () {
-//   // $('resetBar').append('<div id="resetWrapper"><span id="resetText">Reset</span><div id="resetSlit"><div id="resetBtn"></div></div></div>');
-// }
+function dropToken (col) {
+  console.log('You clicked on: ' + this);
 
-function dropToken () {
-  if (playerTurn === 1) {
-    this.lastChild.className = "slot player1";
-  } else if (playerTurn === 2) {
-    this.lastChild.className = "slot player2";
+  for (var row = gameBoard[col].length; row >= 0; row--) {
+    if (gameBoard[col][row] === 0) {
+      gameBoard[col][row] = playerTurn;
+      $('#col' + col + 'cell' + row).addClass('player' + playerTurn);
+      // console.log('player ' + playerTurn + ' has taken his turn');
+      checkForWin(col, row);
+      playerTurn = 3 - playerTurn;
+      togglePlayer(playerTurn);
+      // console.log(gameBoard[col] + ' and ' +gameBoard[col][row]);
+      return;
+    } else if (row === gameBoard.length) {
+      // console.log('it is still player ' + playerTurn + 's turn');
+    }
   }
-
-  playerTurn = 3 - playerTurn;
-
-  console.log('This works! You clicked on: ' + this.className);
-}
-
-function tokenFall () {
-  this.firstChild
 }
 
 function resetBoard () {
-  if (resetBtn.className === "resetActive"){
-    resetBtn.className = "";
+  if (resetBtn.hasClass('resetActive')){
+    resetBtn.removeClass('resetActive');
   } else {
-    resetBtn.className = "resetActive";
+    resetBtn.addClass('resetActive');
   }
+  console.log("player" + playerStart + " was starting");
   playerStart = 3 - playerStart;
+  console.log('player' + playerStart + ' now starting');
+  playerTurn = playerStart;
+  togglePlayer(playerTurn);
 }
+
+function togglePlayer(playerNum) {
+  if (playerNum === 1) {
+    play1ScoreBoard.css('background', 'rgba(216, 84, 74, 1)')
+    play2ScoreBoard.css('background', 'rgba(236, 181, 56, 0)')
+  } else {
+    play2ScoreBoard.css('background', 'rgba(236, 181, 56, 1)')
+    play1ScoreBoard.css('background', 'rgba(216, 84, 74, 0)')
+  }
+}
+
+function checkForWin(col, cell) {
+  if (gameBoard[col][cell] === gameBoard[col][cell + 1] &&
+      gameBoard[col][cell] === gameBoard[col][cell + 2] &&
+      gameBoard[col][cell] === gameBoard[col][cell + 3]) {
+    console.log("Player " + playerTurn + " wins Vertically");
+  } else if (gameBoard[col][cell] === gameBoard[col + 1][cell] &&
+             gameBoard[col][cell] === gameBoard[col + 2][cell] &&
+             gameBoard[col][cell] === gameBoard[col + 3][cell]){
+    console.log("Player " + playerTurn + " wins Horiozntally");
+  }
+  // } else if (gameBoard[col][cell] ===
+  //            gameBoard[col + 1][cell - 1] &&
+  //            gameBoard[col + 2][cell - 2] &&
+  //            gameBoard[col + 3][cell - 3] ||
+  //            gameBoard[col - 1][cell + 1] &&
+  //            gameBoard[col - 2][cell + 2] &&
+  //            gameBoard[col - 3][cell + 3] ||
+  //            gameBoard[col - 1][cell + 1] &&
+  //            gameBoard[col - 2][cell + 2] &&
+  //            gameBoard[col + 1][cell - 1] ||
+  //            gameBoard[col - 1][cell + 1] &&
+  //            gameBoard[col + 1][cell - 1] &&
+  //            gameBoard[col + 2][cell - 2]) {
+  //   console.log("Player " + playerTurn + " wins diagnoally");
+  // } else if (gameBoard[col][cell] ===
+  //            gameBoard[col + 1][cell - 1] &&
+  //            gameBoard[col + 2][cell - 2] &&
+  //            gameBoard[col + 3][cell - 3] ||
+  //            gameBoard[col - 1][cell + 1] &&
+  //            gameBoard[col - 2][cell + 2] &&
+  //            gameBoard[col - 3][cell + 3] ||
+  //            gameBoard[col - 1][cell + 1] &&
+  //            gameBoard[col - 2][cell + 2] &&
+  //            gameBoard[col + 1][cell - 1] ||
+  //            gameBoard[col - 1][cell + 1] &&
+  //            gameBoard[col + 1][cell - 1] &&
+  //            gameBoard[col + 2][cell - 2]) {
+  //   console.log("Player " + playerTurn + " wins diagnoally");
+  // } else if (gameBoard[col][cell] ===
+  //            gameBoard[col - 3][cell - 3] &&
+  //            gameBoard[col - 2][cell - 2] &&
+  //            gameBoard[col - 1][cell - 1] ||
+  //            gameBoard[col - 2][cell - 2] &&
+  //            gameBoard[col - 1][cell - 1] &&
+  //            gameBoard[col + 1][cell + 1] ||
+  //            gameBoard[col - 1][cell - 1] &&
+  //            gameBoard[col + 1][cell + 1] &&
+  //            gameBoard[col + 2][cell + 2] ||
+  //            gameBoard[col + 1][cell + 1] &&
+  //            gameBoard[col + 2][cell + 2] &&
+  //            gameBoard[col + 3][cell + 3]) {
+  //   console.log("Player " + playerTurn + " wins diagnoally")
+  // }
+}
+
+function checkVertically () {
+
+}
+
+function checkHorizontally () {
+
+}
+
+function checkDiagnoalAscending () {
+
+}
+function checkDiagnoalDescending () {
+
+}
+
+function checkForEdge () {
+}
+

@@ -27,23 +27,29 @@ p {
   padding: 0;
   text-transform: uppercase;
 }
-.scores {
-  padding: 0;
-  margin: 0;
-  font-size: 30px;
-  font-weight: bold;
-}
 .scoreBoard {
   display: flex;
   padding: 5px;
   justify-content: space-around;
   align-items: center;
 }
+.scoreP1 {
+  background: #d8544a;
+  border: 2px #d8544a solid;
+  border-radius: 10px;
+  transition: background 1s;
+}
+.scoreP2 {
+  background: rgba(236, 181, 56, 0);
+  border: 2px #ecb538 solid;
+  border-radius: 10px;
+  transition: background 1s;
+}
 #turnCoin {
   width: 50px;
   height: 50px;
-  border: 2px #d8544a solid;
-  background: #d8544a;
+  /*border: 2px #d8544a solid;*/
+  /*background: #d8544a;*/
   border-radius: 50px;
   align-self: center;
   text-align: center;
@@ -94,13 +100,17 @@ p {
   flex-direction: column;
   text-align: center;
 }
+#resetBar:hover #resetText {
+  color: white;
+  transition: color 1.5s;
+}
 #resetSlit {
   margin: 0 0 6px 0;
   width: 70px;
   height: 15px;
   background: #175DCC;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   border: 2px #004fcc solid;
   border-radius: 10px;
@@ -111,18 +121,16 @@ p {
   font-family: 'Open Sans', sans-serif;
   font-size: 12px;
   text-transform: uppercase;
-  transition: color 1s;
+  transition: color .5s;
 }
-.resetTextActive {
-  color: white;
-  transition: color 1s;
-}
+
 #resetSlit:hover {
   background: #005ef3;
   color: white;
 }
 .resetActive {
-  justify-content: flex-start;
+  justify-content: flex-end !important;
+  transition: justify-content 1s;
 }
 #resetBtn {
   width: 40px;
@@ -154,7 +162,7 @@ p {
 /*#gameBoard {
   background: #175DCC;
 }
-.slot {
+.cell {
   height: 48px;
   width: 48px;
   margin: 6px;
@@ -167,21 +175,22 @@ p {
   background: rgba(0, 79, 204, .75);
   border-radius: 25px;
 }*/
-.slot.player1 {
+.cell.player1 {
   background: #d8544a;
+
 }
-.slot.player2 {
+.cell.player2 {
   background: #ecb538;
 }
 
-.slot {
+.cell {
   height: 50px;
   width: 50px;
   position: relative;
   overflow: hidden;
   padding: 5px 10px;
 }
-.slot::before {
+.cell::before {
   content: '';
   position: absolute;
   width: 50px;
