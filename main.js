@@ -2,7 +2,7 @@ var playerStart = 1;
 var playerTurn = 1;
 var player1Score = 0;
 var player2Score = 0;
-
+//test
 var gameBoard = [];
 
 var $player1ScoreBoard = $('.score.scoreP1');
