@@ -22,9 +22,12 @@ function buildBoard () {
     gameBoard[i] = [];
     var col = document.createElement('div');
 
-    var lastcell = 0;
     col.className = 'col col' + i;
-    col.addEventListener('mouseover', movePiece);
+
+    var colPos = $("col col" + i);
+    console.log(colPos);
+
+    col.setAttribute('mouseover', 'movePiece(' + i + ',' + colPos + ')');
     col.setAttribute('onclick', 'dropToken(' + i + ')');
     // Add rows to each column
     for (j = 0; j < 6; j++) {
@@ -146,8 +149,8 @@ function checkForWin(col, cell) {
   // }
 }
 
-function movePiece () {
-
+function movePiece (col, pos) {
+  $('.piece').position().left = pos;
 }
 
 function checkForFour(cell1, cell2, cell3, cell4) {
