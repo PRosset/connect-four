@@ -10,38 +10,39 @@ var $player2ScoreBoard = $('.score.scoreP2');
 
 var $player1Score = $('#scoreOne');
 var $player2Score = $('#scoreTwo');
-var resetBtn = $('#resetSlit');
-resetBtn.click(resetGame);
+var $resetBtn = $('#resetSlit');
+$resetBtn.click(resetGame);
 
 buildBoard();
 
 function buildBoard () {
-  var domBoard = document.getElementById('gameBoard');
+  var domBoard = $('#gameBoard');
 
   for (i = 0; i < 7; i++) {
     gameBoard[i] = [];
-    var col = document.createElement('div');
-
-    var lastcell = 0;
-    col.className = 'col col' + i;
-    col.addEventListener('mouseover', movePiece);
-    col.setAttribute('onclick', 'dropToken(' + i + ')');
+    var $col = $('<div className="col col' + i +'" onclick=dropPiece('
+                 + i + ')></div>');
+    $col.hover(function () {
+      var hoverCol = $('col col' + i).css('background', 'rgba(0, 79, 204, .3)');
+    });
+    var colPosition = $col.position();
+    console.log(colPosition.left);
     // Add rows to each column
     for (j = 0; j < 6; j++) {
       var cell = document.createElement('div');
 
       cell.className = 'cell';
       cell.setAttribute('id', 'col' + i + 'cell' + j)
-      col.appendChild(cell);
+      $col.append(cell);
       gameBoard[i][j] = 0;
     }
 
-    domBoard.appendChild(col);
+    domBoard.append($col);
   }
   // console.log('gameBoard:', gameBoard);
 }
 
-function dropToken (col) {
+function dropPiece (col) {
 
   for (var row = gameBoard[col].length; row >= 0; row--) {
     if (gameBoard[col][row] === 0) {
@@ -61,12 +62,12 @@ function dropToken (col) {
 }
 
 function resetGame () {
-  if (resetBtn.hasClass('resetActive')){
-    resetBtn.removeClass('resetActive');
+  if ($resetBtn.hasClass('resetActive')){
+    $resetBtn.removeClass('resetActive');
     player1Score = player1Score + 1;
     $player1Score.text(player1Score);
   } else {
-    resetBtn.addClass('resetActive');
+    $resetBtn.addClass('resetActive');
     player2Score = player2Score + 1;
     $player2Score.text(player2Score);
   }
@@ -86,11 +87,11 @@ function resetGame () {
 
 function togglePlayer(playerNum) {
   if (playerNum === 1) {
-    $player1ScoreBoard.css('background', 'rgba(216, 84, 74, 1)')
-    $player2ScoreBoard.css('background', 'rgba(236, 181, 56, 0)')
+    $player1ScoreBoard.css('background', 'rgba(216, 84, 74, 1)');
+    $player2ScoreBoard.css('background', 'rgba(236, 181, 56, 0)');
   } else {
-    $player2ScoreBoard.css('background', 'rgba(236, 181, 56, 1)')
-    $player1ScoreBoard.css('background', 'rgba(216, 84, 74, 0)')
+    $player2ScoreBoard.css('background', 'rgba(236, 181, 56, 1)');
+    $player1ScoreBoard.css('background', 'rgba(216, 84, 74, 0)');
   }
 }
 
@@ -146,9 +147,10 @@ function checkForWin(col, cell) {
   // }
 }
 
-function movePiece () {
+// function movePiece (col) {
+//   var $movingPiece = $('.piece');
 
-}
+// }
 
 function checkForFour(cell1, cell2, cell3, cell4) {
   return cell1 === cell2 &&

@@ -1,6 +1,8 @@
 /*  #ecb538 yellow */
 /* #d8544a red */
-
+* {
+  cursor: default;
+}
 body {
   margin: 0;
   background: #0e98e3;
@@ -199,6 +201,7 @@ p {
   box-shadow: 0px 7px 0px 34px #175dcc;
 }
 .col:hover {
+  cursor: pointer;
   background: rgba(0, 79, 204, .3);
   border-radius: 25px;
 }
@@ -211,4 +214,5 @@ p {
   top: 10px;
   left: 10px;
   z-index: -1;
+  transition: position;
 }
