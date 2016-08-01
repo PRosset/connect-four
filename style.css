@@ -1,10 +1,12 @@
 /*  #ecb538 yellow */
 /* #d8544a red */
-
+* {
+  cursor: default;
+}
 body {
   margin: 0;
   background: #0e98e3;
-  color: white;
+  color: #ecf0f1;
 }
 .wrapper {
   display: flex;
@@ -30,7 +32,8 @@ p {
 .scoreBoard {
   display: flex;
   padding: 5px;
-  justify-content: space-around;
+  width: 350px;
+  justify-content: space-between;
   align-items: center;
 }
 .scoreP1 {
@@ -59,6 +62,7 @@ p {
   text-align: center;
   flex-direction: column;
   align-items: center;
+  transition: content .5s;
 }
 
 .playSpace {
@@ -195,10 +199,17 @@ p {
   width: 50px;
   height: 50px;
   border-radius: 100%;
-  border: 3px #004fcc solid;
+  border: 3px solid;
+  border-color: #004fcc;
   box-shadow: 0px 7px 0px 34px #175dcc;
+  transition: border-color 1s;
+}
+.winnerCell {
+  border-color: #ecf0f1;
+  transition: border-color 1s;
 }
 .col:hover {
+  cursor: pointer;
   background: rgba(0, 79, 204, .3);
   border-radius: 25px;
 }
@@ -211,4 +222,5 @@ p {
   top: 10px;
   left: 10px;
   z-index: -1;
+  transition: left 2s;
 }
