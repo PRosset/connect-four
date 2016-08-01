@@ -64,7 +64,6 @@ p {
 .playSpace {
   display: flex;
   width: 490px;
-  padding: 20px 0 0 0;
   flex-direction: column;
 }
 .columnSelector, #gameBoard, #resetBar {
@@ -75,7 +74,7 @@ p {
   height: 20px;
   background: #175DCC;
   border-radius: 20px 20px 0 0;
-  margin: 40px 0 0 0;
+  margin: 20px 0 0 0;
   border-right: 7px #004fcc solid;
   /*background: rgba(23, 93, 204, .2);*/
 }
@@ -203,5 +202,13 @@ p {
   background: rgba(0, 79, 204, .3);
   border-radius: 25px;
 }
-
-
+.piece {
+  height: 50px;
+  width: 50px;
+  border-radius: 100%;
+  background: #d8544a;
+  position: relative;
+  top: 10px;
+  left: 10px;
+  z-index: -1;
+}

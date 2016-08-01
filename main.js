@@ -23,8 +23,8 @@ function buildBoard () {
     var col = document.createElement('div');
 
     var lastcell = 0;
-
     col.className = 'col col' + i;
+    col.addEventListener('mouseover', movePiece);
     col.setAttribute('onclick', 'dropToken(' + i + ')');
     // Add rows to each column
     for (j = 0; j < 6; j++) {
@@ -144,6 +144,10 @@ function checkForWin(col, cell) {
   //            gameBoard[col][cell] === gameBoard[col + 3][cell + 3]) {
   //   console.log("Player " + playerTurn + " wins diagnoally")
   // }
+}
+
+function movePiece () {
+
 }
 
 function checkForFour(cell1, cell2, cell3, cell4) {
