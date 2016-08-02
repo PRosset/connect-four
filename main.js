@@ -17,33 +17,35 @@ $resetBtn.click(resetGame);
 buildBoard();
 
 function buildBoard () {
-  var domBoard = $('#gameBoard');
+  var $domBoard = $('#gameBoard');
 
   for (i = 0; i < 7; i++) {
     gameBoard[i] = [];
     var $col = $('<div class="col col' + i +'" onclick=dropPiece('
                  + i + ')></div>');
-    domBoard.append($col);
+    $domBoard.append($col);
     var $colPos = $col.offset();
 
-    var testInc = 40 * i;
-    console.log($colPos);
-    $col.hover(function () {
-      console.log("I fired!");
-      $('.piece').css('left', $colPos.left + 'px');
-      // newPiece.css({left: $colPos});
-    });
     // Add rows to each column
     for (j = 0; j < 6; j++) {
       var cell = document.createElement('div');
-
       cell.className = 'cell';
       cell.setAttribute('id', 'col' + i + 'cell' + j)
       $col.append(cell);
       gameBoard[i][j] = 0;
     }
   }
+  createPiece();
   // console.log('gameBoard:', gameBoard);
+}
+function createPiece () {
+  var $newPiece = $('<div class="piece"></div>');
+  $('.playSpace').prepend($newPiece);
+
+  $('.playSpace').delegate('.col', 'mouseenter', function (){
+    var left = $(this).offset().left - $newPiece.parent().offset().left + $(this).outerWidth()/2 - $newPiece.width()/2;
+    $newPiece.stop().animate({left: left}, 350, 'swing');
+  });
 }
 
 function dropPiece (col) {
@@ -58,7 +60,6 @@ function dropPiece (col) {
           playerTurn = 3 - playerTurn;
           togglePlayer(playerTurn);
         }
-
         return;
       } else if (row === gameBoard.length) {
          console.log('it is still player ' + playerTurn + 's turn');
@@ -95,9 +96,11 @@ function resetGame () {
 
 function togglePlayer(playerNum) {
   if (playerNum === 1) {
+    $('.piece').css('background', '#d8544a');
     $player1ScoreBoard.css('background', 'rgba(216, 84, 74, 1)');
     $player2ScoreBoard.css('background', 'rgba(236, 181, 56, 0)');
   } else {
+    $('.piece').css('background', '#ecb538');
     $player2ScoreBoard.css('background', 'rgba(236, 181, 56, 1)');
     $player1ScoreBoard.css('background', 'rgba(216, 84, 74, 0)');
   }
@@ -113,16 +116,19 @@ function checkForWin(col, cell) {
     console.log(gameEnabled);
   } else if (checkHorizontal(col, cell)) {
     // console.log(checkHorizontal(col, cell));
+    highlightWinner(checkHorizontal(col, cell));
     someoneWon();
     gameEnabled = false;
     console.log(gameEnabled);
   } else if (checkDiagonalAscending(col, cell)) {
     // console.log(checkDiagonalAscending(col, cell));
+    highlightWinner(checkDiagonalAscending(col, cell));
     someoneWon();
     gameEnabled = false;
     console.log(gameEnabled);
   } else if (checkDiagonalDescending(col, cell)) {
     // console.log(checkDiagonalDescending(col, cell));
+    highlightWinner(checkDiagonalDescending(col, cell));
     someoneWon();
     gameEnabled = false;
     console.log(gameEnabled);
@@ -257,10 +263,9 @@ function someoneWon () {
   }
 }
 function highlightWinner (pos) {
-  $('#col0cell0.cell.player1::before').addClass("winnerCell");
-  // $('#col' + pos[0] + 'row' + pos[1] + '.cell.player'+ playerTurn + '::before').addClass("winnerCell");
-  // $('#col' + pos[2] + 'row' + pos[3] + '.cell.player'+ playerTurn + '::before').addClass("winnerCell");
-  // $('#col' + pos[4] + 'row' + pos[5] + '.cell.player'+ playerTurn + '::before').addClass("winnerCell");
-  // $('#col' + pos[6] + 'row' + pos[7] + '.cell.player'+ playerTurn + '::before').addClass("winnerCell");
+  $('#col' + pos[0] + 'cell' + pos[1]).addClass("winnerCell");
+  $('#col' + pos[2] + 'cell' + pos[3]).addClass("winnerCell");
+  $('#col' + pos[4] + 'cell' + pos[5]).addClass("winnerCell");
+  $('#col' + pos[6] + 'cell' + pos[7]).addClass("winnerCell");
   console.log("I ran");
 }
