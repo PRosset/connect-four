@@ -39,7 +39,6 @@ function buildBoard () {
     }
   }
   createPiece();
-  // console.log('gameBoard:', gameBoard);
 }
 function createPiece () {
   var $newPiece = $('<div class="piece"></div>');
