@@ -49,7 +49,8 @@ function createPiece () {
         return;
       } else {
           dropReady = false
-          var left = $(this).offset().left - $newPiece.parent().offset().left + $(this).outerWidth()/2 - $newPiece.width()/2;
+          var left = $(this).offset().left - $newPiece.parent().offset().left
+                     + $(this).outerWidth()/2 - $newPiece.width()/2;
           $newPiece.stop().animate({left: left}, 200, 'swing', function(){
             dropReady = true;
           });
@@ -63,16 +64,13 @@ function dropPiece (col) {
       if (gameBoard[col][row] === 0) {
         gameBoard[col][row] = playerTurn;
         pieceReady = false;
+        dropReady = false;
         var newCell = $('#col' + col + 'cell' + row);
-
         var cellPos = newCell.offset();
-        console.log("newCell: ");
-        console.log(newCell);
-        console.log(" Position is: ");
-        console.log(cellPos);
-
         var $newPiece = $('.piece');
-        var top = cellPos.top - $newPiece.parent().offset().top + newCell.outerHeight()/2 - $newPiece.height()/2;
+
+        var top = cellPos.top - $newPiece.parent().offset().top +
+                  newCell.outerHeight()/2 - $newPiece.height()/2;
         $newPiece.stop().animate({top: top}, 600, 'easeOutBounce', function() {
           newCell.addClass('player' + playerTurn);
           checkForWin(col, row);
@@ -82,6 +80,7 @@ function dropPiece (col) {
             $newPiece.css('top', "0");
           }
           pieceReady = true;
+          dropReady = true;
         });
         return;
       } else if (row === gameBoard.length) {
@@ -94,10 +93,15 @@ function dropPiece (col) {
 }
 
 function resetGame () {
+  $player1ScoreBoard.removeClass('winnerP1');
+  $player2ScoreBoard.removeClass('winnerP2');
+  $('#resetText').text("RESET").css('color', '#175DCC');
   if ($resetBtn.hasClass('resetActive')){
     $resetBtn.removeClass('resetActive');
+    $('#resetBtn').css('background', '#d8544a');
   } else {
     $resetBtn.addClass('resetActive');
+    $('#resetBtn').css('background', '#ecb538');
   }
 
   gameEnabled = true;
@@ -113,12 +117,14 @@ function resetGame () {
   for (var i = 0; i < gameBoard.length; i++) {
     for (var j = 0; j < gameBoard[0].length; j++) {
       gameBoard[i][j] = 0;
-      $('#col' + i + 'cell' + j).removeClass('player1 player2');
+      $('#col' + i + 'cell' + j).removeClass('player1 player2 winnerP1 winnerP2');
     }
   }
 }
 
 function togglePlayer(playerNum) {
+
+
   if (playerNum === 1) {
     $('.piece').css('background', '#d8544a');
     $player1ScoreBoard.css('background', 'rgba(216, 84, 74, 1)');
@@ -272,11 +278,13 @@ function someoneWon () {
     $('#scoreTwo').text("WINNER!");
     player2Score = player2Score + 1;
   }
+  $('#resetText').text("NEW GAME").css('color', '#ecf0f1');
 }
 function highlightWinner (pos) {
-  $('#col' + pos[0] + 'cell' + pos[1]).css('border-color', 'black');
-  $('#col' + pos[2] + 'cell' + pos[3]).css('border-color', 'black');
-  $('#col' + pos[4] + 'cell' + pos[5]).css('border-color', 'black');
-  $('#col' + pos[6] + 'cell' + pos[7]).css('border-color', 'black');
+  $('#col' + pos[0] + 'cell' + pos[1] + '.cell.player' + playerTurn).addClass('winnerP' + playerTurn);
+  $('#col' + pos[2] + 'cell' + pos[3] + '.cell.player' + playerTurn).addClass('winnerP' + playerTurn);
+  $('#col' + pos[4] + 'cell' + pos[5] + '.cell.player' + playerTurn).addClass('winnerP' + playerTurn);
+  $('#col' + pos[6] + 'cell' + pos[7] + '.cell.player' + playerTurn).addClass('winnerP' + playerTurn);
+  $('.score.scoreP' + playerTurn).addClass('winnerP' + playerTurn);
   console.log("I ran");
 }

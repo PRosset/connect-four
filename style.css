@@ -128,7 +128,7 @@ p {
   width: 40px;
   height: 15px;
   background: #d8544a;
-
+  transition: background 1s;
   border-radius: 10px;
 }
 .fixed {
@@ -150,28 +150,16 @@ p {
 .fixed:hover {
   background: #2c3e50;
 }
-
-/*#gameBoard {
-  background: #175DCC;
+.winnerP1 {
+  animation: pulsePOne .5s infinite alternate !important;
 }
-.cell {
-  height: 48px;
-  width: 48px;
-  margin: 6px;
-  background: #0e98e3;
-  border-radius: 50%;
-  border: 3px #004fcc solid;
-  align-self: flex-end;
+.winnerP2 {
+  animation: pulsePTwo .5s infinite alternate !important;
 }
-.col:hover {
-  background: rgba(0, 79, 204, .75);
-  border-radius: 25px;
-}*/
-.cell.player1 {
+.player1 {
   background: #d8544a;
-
 }
-.cell.player2 {
+.player2 {
   background: #ecb538;
 }
 
@@ -193,22 +181,34 @@ p {
   box-shadow: 0px 7px 0px 34px #175dcc;
   transition: border-color 1s;
 }
-.winnerCell {
-  border-color: #ecf0f1;
-  transition: border-color 1s;
-}
 .col:hover {
   cursor: pointer;
   background: rgba(0, 79, 204, .3);
   border-radius: 25px;
 }
 .piece {
-  height: 60px;
-  width: 60px;
+  height: 50px;
+  width: 50px;
   border-radius: 100%;
   background: #d8544a;
   position: relative;
-  /*top: 10px;
-  left: 10px;*/
   z-index: -1;
 }
+@keyframes pulsePOne {
+  0% {
+    background-color: #d8544a;
+  }
+  100% {
+    background-color: #A54039;
+  }
+}
+@keyframes pulsePTwo {
+  0% {
+    background-color: #ecb538;
+  }
+  100% {
+    background-color: #B98E2C;
+  }
+}
+
+
