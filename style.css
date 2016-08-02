@@ -203,13 +203,12 @@ p {
   border-radius: 25px;
 }
 .piece {
-  height: 50px;
-  width: 50px;
+  height: 60px;
+  width: 60px;
   border-radius: 100%;
   background: #d8544a;
   position: relative;
-  top: 10px;
-  left: 10px;
+  /*top: 10px;
+  left: 10px;*/
   z-index: -1;
-  transition: background 1s;
 }

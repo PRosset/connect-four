@@ -11,6 +11,9 @@ var $player2ScoreBoard = $('.score.scoreP2');
 var $player1Score = $('#scoreOne');
 var $player2Score = $('#scoreTwo');
 
+var pieceReady = true;
+var dropReady = true;
+
 var $resetBtn = $('#resetSlit');
 $resetBtn.click(resetGame);
 
@@ -41,25 +44,45 @@ function buildBoard () {
 function createPiece () {
   var $newPiece = $('<div class="piece"></div>');
   $('.playSpace').prepend($newPiece);
-
-  $('.playSpace').delegate('.col', 'mouseenter', function (){
-    var left = $(this).offset().left - $newPiece.parent().offset().left + $(this).outerWidth()/2 - $newPiece.width()/2;
-    $newPiece.stop().animate({left: left}, 350, 'swing');
+    $('.playSpace').delegate('.col', 'mouseover', function (){
+      if (!pieceReady || !gameEnabled) {
+        return;
+      } else {
+          dropReady = false
+          var left = $(this).offset().left - $newPiece.parent().offset().left + $(this).outerWidth()/2 - $newPiece.width()/2;
+          $newPiece.stop().animate({left: left}, 200, 'swing', function(){
+            dropReady = true;
+          });
+      }
   });
 }
 
 function dropPiece (col) {
-  if (gameEnabled) {
+  if (gameEnabled && dropReady) {
     for (var row = gameBoard[col].length; row >= 0; row--) {
       if (gameBoard[col][row] === 0) {
         gameBoard[col][row] = playerTurn;
-        $('#col' + col + 'cell' + row).addClass('player' + playerTurn);
+        pieceReady = false;
+        var newCell = $('#col' + col + 'cell' + row);
 
-        checkForWin(col, row);
-        if (gameEnabled) {
-          playerTurn = 3 - playerTurn;
-          togglePlayer(playerTurn);
-        }
+        var cellPos = newCell.offset();
+        console.log("newCell: ");
+        console.log(newCell);
+        console.log(" Position is: ");
+        console.log(cellPos);
+
+        var $newPiece = $('.piece');
+        var top = cellPos.top - $newPiece.parent().offset().top + newCell.outerHeight()/2 - $newPiece.height()/2;
+        $newPiece.stop().animate({top: top}, 600, 'easeOutBounce', function() {
+          newCell.addClass('player' + playerTurn);
+          checkForWin(col, row);
+          if (gameEnabled) {
+            playerTurn = 3 - playerTurn;
+            togglePlayer(playerTurn);
+            $newPiece.css('top', "0");
+          }
+          pieceReady = true;
+        });
         return;
       } else if (row === gameBoard.length) {
          console.log('it is still player ' + playerTurn + 's turn');
@@ -81,6 +104,7 @@ function resetGame () {
   $('#scoreOne').text(player1Score);
   $('#scoreTwo').text(player2Score);
 
+  $(".piece").css({'top':"0", "left":"0"});
   playerStart = 3 - playerStart;
   playerTurn = playerStart;
   togglePlayer(playerTurn);
@@ -109,26 +133,26 @@ function togglePlayer(playerNum) {
 function checkForWin(col, cell) {
   var test = checkVertical
   if (checkVertical(col, cell)) {
-    // console.log(checkVertical(col, cell));
+    console.log('Player ' + playerTurn + " wins Vertically");
     someoneWon();
     highlightWinner(checkVertical(col, cell));
     gameEnabled = false;
     console.log(gameEnabled);
   } else if (checkHorizontal(col, cell)) {
-    // console.log(checkHorizontal(col, cell));
     highlightWinner(checkHorizontal(col, cell));
+    console.log("Player " + playerTurn + " wins Horizontally");
     someoneWon();
     gameEnabled = false;
     console.log(gameEnabled);
   } else if (checkDiagonalAscending(col, cell)) {
-    // console.log(checkDiagonalAscending(col, cell));
     highlightWinner(checkDiagonalAscending(col, cell));
+    console.log("Player " + playerTurn + " wins Diagnoal Ascending");
     someoneWon();
     gameEnabled = false;
     console.log(gameEnabled);
   } else if (checkDiagonalDescending(col, cell)) {
-    // console.log(checkDiagonalDescending(col, cell));
     highlightWinner(checkDiagonalDescending(col, cell));
+    console.log("Player " + playerTurn + " wins Diagnoal Descending");
     someoneWon();
     gameEnabled = false;
     console.log(gameEnabled);
@@ -142,7 +166,6 @@ function checkVertical(col, row) {
       gameBoard[col][row] === gameBoard[col][row + 1] &&
       gameBoard[col][row] === gameBoard[col][row + 2] &&
       gameBoard[col][row] === gameBoard[col][row + 3]) {
-      console.log('Player ' + playerTurn + " wins Vertically");
       return winner = [col, row, col, row + 1, col, row + 2, col, row + 3];
   } else {
     return false;
@@ -154,28 +177,24 @@ function checkHorizontal(col, row) {
       gameBoard[col][row] === gameBoard[col + 1][row] &&
       gameBoard[col][row] === gameBoard[col + 2][row] &&
       gameBoard[col][row] === gameBoard[col + 3][row]) {
-      console.log("Player " + playerTurn + " wins Horizontally");
       return [col, row, col + 1, row, col + 2, row, col + 3, row];
 
   } else if (gameBoard[col - 3] &&
              gameBoard[col][row] === gameBoard[col - 1][row] &&
              gameBoard[col][row] === gameBoard[col - 2][row] &&
              gameBoard[col][row] === gameBoard[col - 3][row]) {
-      console.log("Player " + playerTurn + " wins Horizontally");
       return [col, row, col - 1, row, col - 2, row, col - 3, row];
 
   } else if (gameBoard[col - 1] && gameBoard[col + 2] &&
              gameBoard[col][row] === gameBoard[col - 1][row] &&
              gameBoard[col][row] === gameBoard[col + 1][row] &&
              gameBoard[col][row] === gameBoard[col + 2][row]) {
-      console.log("Player " + playerTurn + " wins Horizontally");
       return [col, row, col - 1, row, col + 1, row, col + 2, row];
 
   } else if (gameBoard[col + 1] && gameBoard[col - 2] &&
              gameBoard[col][row] === gameBoard[col + 1][row] &&
              gameBoard[col][row] === gameBoard[col - 1][row] &&
              gameBoard[col][row] === gameBoard[col - 2][row]) {
-      console.log("Player " + playerTurn + " wins Horizontally");
       return [col, row, col + 1, row, col - 1, row, col - 1, row];
   } else {
     return false;
@@ -187,25 +206,21 @@ function checkDiagonalAscending(col, row) {
       gameBoard[col][row] === gameBoard[col + 1][row - 1] &&
       gameBoard[col][row] === gameBoard[col + 2][row - 2] &&
       gameBoard[col][row] === gameBoard[col + 3][row - 3]) {
-      console.log("Player " + playerTurn + " wins Diagnoal Ascending");
       return [col, row, col + 1, row - 1, col + 2, row - 2, col + 3, row - 3];
   } else if (gameBoard[col - 1] && gameBoard[col + 2] &&
              gameBoard[col][row] === gameBoard[col - 1][row + 1] &&
              gameBoard[col][row] === gameBoard[col + 1][row - 1] &&
              gameBoard[col][row] === gameBoard[col + 2][row - 2]) {
-      console.log("Player " + playerTurn + " wins Diagnoal Ascending");
       return [col, row, col - 1, row + 1, col + 1, row - 1, col + 2, row - 2];
   } else if (gameBoard[col + 1] && gameBoard[col - 2] &&
              gameBoard[col][row] === gameBoard[col - 2][row + 2] &&
              gameBoard[col][row] === gameBoard[col - 1][row + 1] &&
              gameBoard[col][row] === gameBoard[col + 1][row - 1]) {
-      console.log("Player " + playerTurn + " wins Diagnoal Ascending");
       return [col, row, col - 1, row + 1, col - 2, row + 2, col + 1, row - 1];
   } else if (gameBoard[col - 3] &&
              gameBoard[col][row] === gameBoard[col - 1][row + 1] &&
              gameBoard[col][row] === gameBoard[col - 2][row + 2] &&
              gameBoard[col][row] === gameBoard[col - 3][row + 3]) {
-      console.log("Player " + playerTurn + " wins Diagnoal Ascending");
       return [col, row, col - 1, row + 1, col - 2, row + 2, col - 3,row + 3];
   } else {
     return false;
@@ -217,25 +232,21 @@ function checkDiagonalDescending(col, row) {
       gameBoard[col][row] === gameBoard[col - 1][row - 1] &&
       gameBoard[col][row] === gameBoard[col - 2][row - 2] &&
       gameBoard[col][row] === gameBoard[col - 3][row - 3]) {
-      console.log("Player " + playerTurn + " wins Diagnoal Descending");
       return [col, row, col - 1, row - 1, col - 2, row - 2, col - 3, row - 3];
   } else if (gameBoard[col - 2] && gameBoard[col + 1] &&
              gameBoard[col][row] === gameBoard[col - 1][row - 1] &&
              gameBoard[col][row] === gameBoard[col - 2][row - 2] &&
              gameBoard[col][row] === gameBoard[col + 1][row + 1]) {
-      console.log("Player " + playerTurn + " wins Diagnoal Descending");
       return [col, row, col - 1, row - 1, col - 2, row - 2, col + 1, row + 1];
   } else if (gameBoard[col - 1] && gameBoard[col + 2] &&
              gameBoard[col][row] === gameBoard[col - 1][row - 1] &&
              gameBoard[col][row] === gameBoard[col + 1][row + 1] &&
              gameBoard[col][row] === gameBoard[col + 2][row + 2]) {
-      console.log("Player " + playerTurn + " wins Diagnoal Descending");
       return [col, row, col - 1, row - 1, col + 1, row + 1, col + 2, row + 2];
   } else if (gameBoard[col + 3] &&
              gameBoard[col][row] === gameBoard[col + 1][row + 1] &&
              gameBoard[col][row] === gameBoard[col + 2][row + 2] &&
              gameBoard[col][row] === gameBoard[col + 3][row + 3] ) {
-      console.log("Player " + playerTurn + " wins Diagnoal Descending");
       return[col, row, col + 1, row + 1, col + 2, row + 2, col + 3, row + 3];
   } else {
     return false;
@@ -263,9 +274,9 @@ function someoneWon () {
   }
 }
 function highlightWinner (pos) {
-  $('#col' + pos[0] + 'cell' + pos[1]).addClass("winnerCell");
-  $('#col' + pos[2] + 'cell' + pos[3]).addClass("winnerCell");
-  $('#col' + pos[4] + 'cell' + pos[5]).addClass("winnerCell");
-  $('#col' + pos[6] + 'cell' + pos[7]).addClass("winnerCell");
+  $('#col' + pos[0] + 'cell' + pos[1]).css('border-color', 'black');
+  $('#col' + pos[2] + 'cell' + pos[3]).css('border-color', 'black');
+  $('#col' + pos[4] + 'cell' + pos[5]).css('border-color', 'black');
+  $('#col' + pos[6] + 'cell' + pos[7]).css('border-color', 'black');
   console.log("I ran");
 }
