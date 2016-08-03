@@ -1,10 +1,5 @@
-var playerStart = 1;
-var playerTurn = 1;
-var player1Score = 0;
-var player2Score = 0;
-
 var gameBoard = [];
-var gameEnabled = true;
+
 var $player1ScoreBoard = $('.score.scoreP1');
 var $player2ScoreBoard = $('.score.scoreP2');
 
@@ -15,7 +10,39 @@ var pieceReady = true;
 var dropReady = true;
 
 var $resetBtn = $('#resetSlit');
+
+var gameState = {
+  playerStart: 1,
+  playerTurn: 1,
+  player1Score: 0,
+  player2Score: 0,
+  gameEnabled: true
+};
+
+
+soundManager = {
+  soundEnabled: true,
+  winSFX: new Audio('audio/win.wav'),
+  dropPieceSFX: new Audio('audio/dropPiece.wav'),
+  resetSFX: new Audio('audio/reset.wav'),
+  boardFullSFX: new Audio('audio/boardfull.wav'),
+  rowFullSFX: new Audio('audio/rowFull.wav'),
+};
+
+soundManager.dropPieceSFX.volume = 0.2;
+
 $resetBtn.click(resetGame);
+$('.fixed').click(function(){
+  if (soundManager.soundEnabled) {
+    $('.fa').addClass('fa-volume-off').removeClass('fa-volume-up');
+    // $('.fixed').addClass('active');
+    soundManager.soundEnabled = false;
+  } else {
+    $('.fa').addClass('fa-volume-up').removeClass('fa-volume-off');
+    // $('.fixed').removeClass('active');
+    soundManager.soundEnabled = true;
+  }
+})
 
 buildBoard();
 
@@ -44,7 +71,7 @@ function createPiece () {
   var $newPiece = $('<div class="piece"></div>');
   $('.playSpace').prepend($newPiece);
     $('.playSpace').delegate('.col', 'mouseover', function (){
-      if (!pieceReady || !gameEnabled) {
+      if (!pieceReady || !gameState.gameEnabled) {
         return;
       } else {
           dropReady = false
@@ -58,10 +85,11 @@ function createPiece () {
 }
 
 function dropPiece (col) {
-  if (gameEnabled && dropReady) {
+  if (gameState.gameEnabled && dropReady) {
     for (var row = gameBoard[col].length; row >= 0; row--) {
       if (gameBoard[col][row] === 0) {
-        gameBoard[col][row] = playerTurn;
+        if (soundManager.soundEnabled) { soundManager.dropPieceSFX.play(); }
+        gameBoard[col][row] = gameState.playerTurn;
         pieceReady = false;
         dropReady = false;
         var newCell = $('#col' + col + 'cell' + row);
@@ -71,11 +99,12 @@ function dropPiece (col) {
         var top = cellPos.top - $newPiece.parent().offset().top +
                   newCell.outerHeight()/2 - $newPiece.height()/2;
         $newPiece.stop().animate({top: top}, 600, 'easeOutBounce', function() {
-          newCell.addClass('player' + playerTurn);
+          newCell.addClass('player' + gameState.playerTurn);
+
           checkForWin(col, row);
-          if (gameEnabled) {
-            playerTurn = 3 - playerTurn;
-            togglePlayer(playerTurn);
+          if (gameState.gameEnabled) {
+            gameState.playerTurn = 3 - gameState.playerTurn;
+            togglePlayer(gameState.playerTurn);
             $newPiece.css('top', "0");
           }
           pieceReady = true;
@@ -83,7 +112,8 @@ function dropPiece (col) {
         });
         return;
       } else if (row === gameBoard.length) {
-         console.log('it is still player ' + playerTurn + 's turn');
+         if (soundManager.soundEnabled) { soundManager.rowFullSFX.play(); }
+         console.log('it is still player ' + gameState.playerTurn + 's turn');
       }
     }
   } else {
@@ -92,9 +122,10 @@ function dropPiece (col) {
 }
 
 function resetGame () {
+  if (soundManager.soundEnabled) { soundManager.resetSFX.play(); }
   $player1ScoreBoard.removeClass('winnerP1');
   $player2ScoreBoard.removeClass('winnerP2');
-  $('#resetText').text("RESET").css('color', '#175DCC');
+  $('#resetText').removeClass('winnerText').text("RESET");
   if ($resetBtn.hasClass('resetActive')){
     $resetBtn.removeClass('resetActive');
     $('#resetBtn').css('background', '#d8544a');
@@ -103,14 +134,14 @@ function resetGame () {
     $('#resetBtn').css('background', '#ecb538');
   }
 
-  gameEnabled = true;
-  $('#scoreOne').text(player1Score);
-  $('#scoreTwo').text(player2Score);
+  gameState.gameEnabled = true;
+  $('#scoreOne').text(gameState.player1Score);
+  $('#scoreTwo').text(gameState.player2Score);
 
   $(".piece").css({'top':"0", "left":"0"});
-  playerStart = 3 - playerStart;
-  playerTurn = playerStart;
-  togglePlayer(playerTurn);
+  gameState.playerStart = 3 - gameState.playerStart;
+  gameState.playerTurn = gameState.playerStart;
+  togglePlayer(gameState.playerTurn);
 
   //Reset board data and cell class names
   for (var i = 0; i < gameBoard.length; i++) {
@@ -122,8 +153,6 @@ function resetGame () {
 }
 
 function togglePlayer(playerNum) {
-
-
   if (playerNum === 1) {
     $('.piece').css('background', '#d8544a');
     $player1ScoreBoard.css('background', 'rgba(216, 84, 74, 1)');
@@ -138,29 +167,25 @@ function togglePlayer(playerNum) {
 function checkForWin(col, cell) {
   var test = checkVertical
   if (checkVertical(col, cell)) {
-    console.log('Player ' + playerTurn + " wins Vertically");
+    console.log('Player ' + gameState.playerTurn + " wins Vertically");
     someoneWon();
     highlightWinner(checkVertical(col, cell));
-    gameEnabled = false;
-    console.log(gameEnabled);
+    gameState.gameEnabled = false;
   } else if (checkHorizontal(col, cell)) {
     highlightWinner(checkHorizontal(col, cell));
-    console.log("Player " + playerTurn + " wins Horizontally");
+    console.log("Player " + gameState.playerTurn + " wins Horizontally");
     someoneWon();
-    gameEnabled = false;
-    console.log(gameEnabled);
+    gameState.gameEnabled = false;
   } else if (checkDiagonalAscending(col, cell)) {
     highlightWinner(checkDiagonalAscending(col, cell));
-    console.log("Player " + playerTurn + " wins Diagnoal Ascending");
+    console.log("Player " + gameState.playerTurn + " wins Diagnoal Ascending");
     someoneWon();
-    gameEnabled = false;
-    console.log(gameEnabled);
+    gameState.gameEnabled = false;
   } else if (checkDiagonalDescending(col, cell)) {
     highlightWinner(checkDiagonalDescending(col, cell));
-    console.log("Player " + playerTurn + " wins Diagnoal Descending");
+    console.log("Player " + gameState.playerTurn + " wins Diagnoal Descending");
     someoneWon();
-    gameEnabled = false;
-    console.log(gameEnabled);
+    gameState.gameEnabled = false;
   } else {
     false;
   }
@@ -267,23 +292,24 @@ function isBoardFull () {
     }
   }
   console.log("Stop the game board is full");
+  if (soundManager.soundEnabled) { soundManager.boardFullSFX.play(); }
   return true;
 }
 function someoneWon () {
-  if (playerTurn === 1) {
+  if (gameState.playerTurn === 1) {
     $('#scoreOne').text("WINNER!");
-    player1Score = player1Score + 1;
-  } else if (playerTurn === 2) {
+    gameState.player1Score = gameState.player1Score + 1;
+  } else if (gameState.playerTurn === 2) {
     $('#scoreTwo').text("WINNER!");
-    player2Score = player2Score + 1;
+    gameState.player2Score = gameState.player2Score + 1;
   }
-  $('#resetText').text("NEW GAME").css('color', '#ecf0f1');
+  $('#resetText').addClass('winnerText').text("NEW GAME");
+  if (soundManager.soundEnabled) { soundManager.winSFX.play(); }
 }
 function highlightWinner (pos) {
-  $('#col' + pos[0] + 'cell' + pos[1] + '.cell.player' + playerTurn).addClass('winnerP' + playerTurn);
-  $('#col' + pos[2] + 'cell' + pos[3] + '.cell.player' + playerTurn).addClass('winnerP' + playerTurn);
-  $('#col' + pos[4] + 'cell' + pos[5] + '.cell.player' + playerTurn).addClass('winnerP' + playerTurn);
-  $('#col' + pos[6] + 'cell' + pos[7] + '.cell.player' + playerTurn).addClass('winnerP' + playerTurn);
-  $('.score.scoreP' + playerTurn).addClass('winnerP' + playerTurn);
-  console.log("I ran");
+  $('#col' + pos[0] + 'cell' + pos[1] + '.cell.player' + gameState.playerTurn).addClass('winnerP' + gameState.playerTurn);
+  $('#col' + pos[2] + 'cell' + pos[3] + '.cell.player' + gameState.playerTurn).addClass('winnerP' + gameState.playerTurn);
+  $('#col' + pos[4] + 'cell' + pos[5] + '.cell.player' + gameState.playerTurn).addClass('winnerP' + gameState.playerTurn);
+  $('#col' + pos[6] + 'cell' + pos[7] + '.cell.player' + gameState.playerTurn).addClass('winnerP' + gameState.playerTurn);
+  $('.score.scoreP' + gameState.playerTurn).addClass('winnerP' + gameState.playerTurn);
 }
