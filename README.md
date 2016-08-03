@@ -7,6 +7,11 @@ Player scores for games won are tracked at the top on the designated players sco
 
 **Link to Game:** [Connect-Four](https://prosset.github.io/connect-four/)
 
+## Goals for the Project
+* Build a game using HTML / CSS / Javascript
+* Design a simple and intuitive website
+* Gain a strong understanding of both CSS and jQuery animation
+
 ## Links
 [Trello Board](https://trello.com/b/2P2oaiUn/connect-four)
 
