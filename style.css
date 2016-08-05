@@ -228,6 +228,12 @@ p {
 .player2 {
   background: #ecb538;
 }
+.starWars1 {
+  background: #e74c3c;
+}
+.starWars2 {
+  background: #34495e;
+}
 
 .cell {
   height: 50px;
@@ -257,6 +263,9 @@ p {
   border-radius: 25px;
 }
 .piece {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 50px;
   width: 50px;
   border-radius: 100%;

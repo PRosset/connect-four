@@ -21,6 +21,7 @@ var gameState = {
 
 var theme = {
   themeNum: 0,
+  playerClass:,
   colorOne: '#d8544a',
   classOne: '',
   colorOneOpacity: 'rgba(236, 181, 56, 0)',
@@ -38,6 +39,7 @@ $('.btn.themeOne').click(function() {
     resetBoardColors();
   } else {
     theme.themeNum = 1
+    theme.playerClass ='starWars'
     $('.cell').addClass('starWars');
     theme.colorOne = '#e74c3c';
     theme.colorOneOpacity = 'rgba(231, 76, 60, 0)';
@@ -48,7 +50,6 @@ $('.btn.themeOne').click(function() {
     theme.boardColor = '#95a5a6';
     theme.boardBorderColor = '#7f8c8d';
     theme._bgColor = '#bdc3c7';
-    $('.piece.player1').html('<i class="fa fa-rebel" aria-hidden="true">');
     updateBoardColors();
   }
 });
@@ -122,17 +123,18 @@ function dropPiece (col) {
     for (var row = gameBoard[col].length; row >= 0; row--) {
       if (gameBoard[col][row] === 0) {
         if (soundManager.soundEnabled) { soundManager.dropPieceSFX.play(); }
-        gameBoard[col][row] = gameState.playerTurn;
-        pieceReady = false;
-        dropReady = false;
+
         var newCell = $('#col' + col + 'cell' + row);
         var cellPos = newCell.offset();
         var $newPiece = $('.piece');
+        gameBoard[col][row] = gameState.playerTurn;
+        pieceReady = false;
+        dropReady = false;
 
         var top = cellPos.top - $newPiece.parent().offset().top +
                   newCell.outerHeight()/2 - $newPiece.height()/2;
         $newPiece.stop().animate({top: top}, 600, 'easeOutBounce', function() {
-          newCell.addClass('player' + gameState.playerTurn);
+          newCell.addClass(theme.playerClass + gameState.playerTurn);
 
           checkForWin(col, row);
           if (gameState.gameEnabled) {
@@ -358,21 +360,26 @@ function updateBoardColors () {
   $player2ScoreBoard.css({'background': theme.colorTwo, 'border-color': theme.colorTwo});
   $('.columnSelector').css({'background': theme.boardColor, 'border-right-color': theme.boardBorderColor});
   $('#gameBoard').css('border-right-color', theme.boardBorderColor);
-  $('#resetBar').css({'background': theme.boardColor, 'border-bottom-color': theme.boardBorderColor, 'border-right-color': theme.boardBorderColor});
-  $resetBtn.css({'background': theme.boardColor, 'border-color': theme.boardBorderColor});
-  $('#resetText').css('color', theme.boardColor).hover(function () {
-    $(this).css('background', theme.boardColor);
-    }, function() {
-      $(this).css('background', theme._bgColor);
+  $('#resetText').css('color', theme.boardColor);
+  $('#resetBar').css({'background': theme.boardColor, 'border-bottom-color': theme.boardBorderColor, 'border-right-color': theme.boardBorderColor}).hover(function() {
+      $('#resetText').css('color', "white");
+    }, function () {
+      $('#resetText').css('color', theme.boardColor);
   });
+  $resetBtn.css({'background': theme.boardColor, 'border-color': theme.boardBorderColor});
   $('#reset').css('background', theme._bgColor);
   $('#resetBtn').css('background', theme.colorOne);
   $('.btn').css('background', theme._bgColor);
-  $('.btn:hover').css('background', theme.boardColor);
+  $('.btn').hover(function() {
+    $(this).css('background', theme.boardColor);
+    }, function () {
+      $(this).css('background', theme._bgColor);
+  });
+  // $('.btn:hover').css('background', theme.boardColor);
   $('.player1').css('background', theme.colorOne);
   $('.player2').css('background', theme.colorTwo);
   // $('.col:hover').css('background')
-  if (playerTurn === 1) {
+  if (gameState.playerTurn === 1) {
     $('.piece').css('background', theme.colorOne);
   } else {
     $('.piece').css('background', theme.colorTwo);
@@ -381,6 +388,7 @@ function updateBoardColors () {
 
 function resetBoardColors () {
     theme.themeNum = 0;
+    theme.playerClass = '';
     $('.cell').removeClass('starWars');
     theme.colorOne = '#d8544a';
     theme.colorOneOpacity = 'rgba(236, 181, 56, 0)';
